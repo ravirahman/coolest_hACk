@@ -1,0 +1,16 @@
+version: '3'
+
+networks:
+  default:
+
+services:
+  isoforecast:
+    build:
+      context: .
+      dockerfile: ./isoForecast/Dockerfile
+    volumes:
+      - ./isoForecast:/isoForecast
+    networks:
+      - default
+    tty: true
+
