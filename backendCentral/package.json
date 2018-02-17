@@ -1,0 +1,21 @@
+{
+  "name": "backendcentral",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "get-pixels": "^3.3.0",
+    "lodash": "^4.17.5",
+    "ndarray": "^1.0.18",
+    "ndarray-unpack": "^1.0.0",
+    "node-schedule": "^1.3.0"
+  }
+}
