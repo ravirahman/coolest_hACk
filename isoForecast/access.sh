@@ -1,2 +1,3 @@
 # Access the Docker cluster
-bash -c "clear && docker exec -it coolesthack_isoforecast_1 sh"
+bash -c "clear && docker exec -it coolest_hack_isoforecast_1 sh"
+

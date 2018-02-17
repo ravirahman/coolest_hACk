@@ -1,6 +1,5 @@
 pytest==3.2.1
 numpy
-gensim
 h5py
 requests
 sklearn

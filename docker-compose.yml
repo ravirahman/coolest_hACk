@@ -13,4 +13,8 @@ services:
     networks:
       - default
     tty: true
+    ports:
+      - 5001:5001
+
+
 
