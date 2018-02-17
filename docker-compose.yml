@@ -14,7 +14,7 @@ services:
       - default
     tty: true
 
-  backendCentral:
+  backendcentral:
     build:
       context: .
       dockerfile: ./backendCentral/Dockerfile
