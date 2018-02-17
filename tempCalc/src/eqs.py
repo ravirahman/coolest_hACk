@@ -3,38 +3,46 @@ import numpy as np
 from scipy.optimize import minimize, basinhopping
 
 
-def get_best(alpha=-0.05, beta=-0.2, env_temp=90, init_temp=65, min_temp=60, max_temp=65, cost=[10, 15, 30, 60], debug=False):
-  n_segments = len(cost)
-  
-  def to_optimize(ac_temps):
-    total = 0
-    for i in range(n_segments): total += abs(env_temp - ac_temps[i]) * cost[i]
-    return total
+def calc_temp(alpha, beta, input_temp, reservoir_temp, last_temp, t):
+  term1 = (alpha * reservoir_temp) / (alpha + beta)
+  term2 = (beta * input_temp) / (alpha + beta)
+  C = last_temp - term1 - term2
+  return term1 + term2 + C * math.exp(-alpha * t + -beta * t)
 
-  def room_temp(ac_temp, last_temp, t):
-    env_comp = (alpha * env_temp) / (alpha + beta)
-    ac_comp = (beta * ac_temp) / (alpha + beta)
-    C = last_temp - env_comp - ac_comp
-    return env_comp + ac_comp + C * math.exp(alpha * t + beta * t)
 
-  cons = []
-  def room_temp_f(n, ac_temps):
+def calc_cost(costs, env_temps, ac_temps):
+  total = 0
+  for i, cost in enumerate(costs):
+    total += math.pow((env_temps[i] - ac_temps[i]), 2)  * cost
+  return total
+
+
+def main(alpha=0.05, beta=0.3, env_temps=[90, 90, 90, 100], 
+    init_temp=90, min_temp=50, max_temp=70, costs=[5, 100, 10, 60],
+    debug=False):
+
+  to_optimize = lambda ac_temps: calc_cost(costs, env_temps, ac_temps)
+
+  def room_temp(n, ac_temps):
     if n is -1:
       return lambda t: init_temp
-    temp_f = lambda t, y=n: room_temp(ac_temps[y], room_temp_f(y - 1, ac_temps)(t), t)
-    return temp_f
+    return lambda t: calc_temp(alpha, beta, ac_temps[n], env_temps[n],
+        room_temp(n - 1, ac_temps)(15), t)
 
-  for i in range(n_segments):
-    cons.append(lambda temps, y=i: temps[y])
-    cons.append(lambda temps, y=i: room_temp_f(y, temps)(15) - min_temp)
-    cons.append(lambda temps, y=i: max_temp - room_temp_f(y, temps)(15))
+  cons = []
+  for i in range(len(costs)):
+    cons.append(lambda temps, y=i: room_temp(y, temps)(15) - min_temp)
+    cons.append(lambda temps, y=i: max_temp - room_temp(y, temps)(15))
 
-  x0 = [init_temp] * n_segments
+  x0 = [init_temp] * len(costs)
   cons = [{'type': 'ineq', 'fun': f} for f in cons]
   
-  return minimize(to_optimize, x0, method='COBYLA', constraints=cons)
+  return minimize(to_optimize, x0, method='COBYLA', constraints=cons), cons
 
-print(get_best())
-scores = [int(x) for x in get_best()['x']]
+print(main()[0])
+scores = [int(x) for x in main()[0]['x']]
 print(scores)
+
+
+
 
