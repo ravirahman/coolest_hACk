@@ -13,8 +13,16 @@ services:
     networks:
       - default
     tty: true
+
+  backendCentral:
+    build:
+      context: .
+      dockerfile: ./backendCentral/Dockerfile
+    volumes:
+      - ./backendCentral:/backendCentral
+    networks:
+      - default
+    tty: true
     ports:
-      - 5001:5001
-
-
+      - 3000:3000
 
