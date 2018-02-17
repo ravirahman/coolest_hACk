@@ -7,9 +7,15 @@ Auto-regulation of air conditioning units.
 * Docker Compose version 1.14.0
 
 ## Usage
-To access isoForecast:
+To start:
 `docker-compose up --build`
+
+To access isoForecast:
 `cd ./isoForecast`
+`./access.sh`
+
+To access backendCentral:
+`cd ./backendCentral`
 `./access.sh`
 
 ## MIT License 
