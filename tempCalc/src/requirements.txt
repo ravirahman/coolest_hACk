@@ -1,0 +1,9 @@
+pytest==3.2.1
+numpy
+requests
+scipy
+flask
+flask-restful
+flask-api
+flask-cors
+

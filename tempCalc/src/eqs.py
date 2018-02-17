@@ -17,8 +17,8 @@ def calc_cost(costs, env_temps, ac_temps):
   return total
 
 
-def main(alpha=0.05, beta=0.3, env_temps=[90, 90, 90, 100], 
-    init_temp=90, min_temp=50, max_temp=70, costs=[5, 100, 10, 60],
+def main(alpha=0.05, beta=0.3, env_temps=[90, 70, 90, 100], 
+    init_temp=90, min_temp=50, max_temp=70, costs=[5, 5, 5, 5],
     debug=False):
 
   to_optimize = lambda ac_temps: calc_cost(costs, env_temps, ac_temps)
