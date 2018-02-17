@@ -10,6 +10,8 @@ const ndarray = require("ndarray")
 
 app.use(bodyParser.json())
 
+var userMode = null
+
 /******** THERMO SENSOR ********/
 
 // IR response
@@ -28,22 +30,28 @@ app.post('/node/thermo', (req,res) => {
 
     mean = total/(length * width)
 
+    /*
+        1: No user in room, Empty
+        2: User in room, Active
+        3: User in room, Inactive
+    */
+
 })
 
-// POST: 2D sensor data ---> Process to output ---> 0: No user in room, 1: User active in room, 2: User in active in room
-// ---> Call Django ML framework ---> Get optimal setting ---> Send to client
 
 /******** MOBILE APP ********/
 
 // GET: Client will make this call every 30 secs to get optimal temperature
 
 app.post('/node/temp', (req, res) => {
+    var setting = req.body.setting[userMode]
+
     var request = {
         alpha: 0.05,
         beta: 0.3,
-        room_temp: req.body.room_temp,
-        min_temp: req.body.min_temp,
-        max_temp: req.body.max_temp,
+        room_temp: setting.room_temp,
+        min_temp: setting.min_temp,
+        max_temp: setting.max_temp,
     }
 
     axios.post('/flask/temp', request)
@@ -54,8 +62,8 @@ app.post('/node/temp', (req, res) => {
                 temps,
                 metadata
             })
-        })
     })
+})
 
 app.listen(PORT)
 console.log("Started backend server on port", PORT)
