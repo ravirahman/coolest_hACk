@@ -56,6 +56,8 @@ if __name__ == "__main__":
   print(ac_temps)
 
 
-  print(calculate_eff(alpha, beta, room_temp, min_temp, max_temp,
+  eng, cost = (calculate_eff(alpha, beta, room_temp, min_temp, max_temp,
                       env_temps, costs, ac_temps, TOTAL_COUNT))
+  print("Cost saved %:", cost)
+  print("Energy saved %:", eng)
 
