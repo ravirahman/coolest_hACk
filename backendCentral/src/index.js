@@ -106,66 +106,94 @@ app.post('/setAC', (req, res) => {
 app.get('/thermo', (req, res) => {
   async.parallel([
     (cb) => {
-      axios({
-        url: (PARTICLE + 'top_infra'),
-        method: 'get',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-          'authorization': 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e'
+
+      var options = {
+        method: 'GET',
+        url: 'https://api.particle.io/v1/devices/34005b000e51353532343635/top_infra',
+        headers:
+        {
+          authorization: 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e',
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        form: {}
+      };
+
+      request(options, function (error, response, body) {
+        if (error) {
+          return cb(error);
         }
-      }).then((res0) => {
-        return cb(null, res0.data.result);
-        }).catch((err) => cb(err));
+        return cb(null, JSON.parse(body).result);
+      });
     },
     (cb) => {
-      axios({
-        url: (PARTICLE + 'middle_infra'),
-        method: 'get',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-          'authorization': 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e'
+      var options = {
+        method: 'GET',
+        url: 'https://api.particle.io/v1/devices/34005b000e51353532343635/middle_infra',
+        headers:
+        {
+          authorization: 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e',
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        form: {}
+      };
+
+      request(options, function (error, response, body) {
+        if (error) {
+          return cb(error);
         }
-      }).then((res1) => {
-        return cb(null, res1.data.result);
-      }).catch((err) => cb(err));
+        return cb(null, JSON.parse(body).result);
+      });
     },
     (cb) => {
-      axios({
-        url: (PARTICLE + 'bottom_infra'),
-        method: 'get',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-          'authorization': 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e'
+      var options = {
+        method: 'GET',
+        url: 'https://api.particle.io/v1/devices/34005b000e51353532343635/bottom_infra',
+        headers:
+        {
+          authorization: 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e',
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        form: {}
+      };
+
+      request(options, function (error, response, body) {
+        if (error) {
+          return cb(error);
         }
-      }).then((res1) => {
-        return cb(null, res1.data.result);
-        }).catch((err) => cb(err));
+        return cb(null, JSON.parse(body).result);
+      });
     },
     (cb) => {
-      axios({
-        url: (LED + 'fan'),
-        method: 'get',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-          'authorization': 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e'
+      var options = {
+        method: 'GET',
+        url: 'https://api.particle.io/v1/devices/1f0025001247343438323536/fan',
+        headers:
+        {
+          authorization: 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e',
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        form: {}
+      };
+
+      request(options, function (error, response, body) {
+        if (error) {
+          return cb(error);
         }
-      }).then((res0) => {
-        return cb(null, res0.data.result);
-        }).catch((err) => cb(err));
+        return cb(null, JSON.parse(body).result);
+      });
     }
   ], (err, data) => {
     if (err) {
-      return res.status(500).send(err);
+      return res.status(500).send("error");
     }
     var top = data[0];
     var mid = data[1];
     var bottom = data[2];
     var fan = data[3]
-    /*if (res2.data.result > 1.1 * res0.data.result) {
+    if (mid > 1.1 * bottom) {
       fan = 1
-      fanGlobal = 1
       console.log("FAN ON");
-    }*/
+    }
 
     var temps = { top, mid, bottom }
     var mean = (top + mid + bottom) / 3
