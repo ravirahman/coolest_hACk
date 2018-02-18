@@ -15,8 +15,11 @@ with open('price.csv', 'r') as f:
     times.append(int(dt.strftime("%s")))
     scores.append(row[1])
 
-def get_cost_proj(unix_time):
+def get_cost_proj(TOTAL_COUNT, unix_time):
   for i, tm in enumerate(times):
     if tm > unix_time:
-      return [float(scores[i]), float(scores[i + 3]), float(scores[i + 6]), float(scores[i + 9])]
+      cs = []
+      for j in range(TOTAL_COUNT):
+        cs.append(float(scores[i + 3 * j]))
+      return cs
 
