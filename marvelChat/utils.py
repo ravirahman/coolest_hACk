@@ -1,5 +1,6 @@
 import csv
 import random
+import speech_recognition as sr
 
 
 super_heroes = []
@@ -114,6 +115,24 @@ def handle(inp):
 
 
 if __name__ == "__main__":
+  print("Hey")
   while True:
-    print(handle(input("You: ")))
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+      print("Say something!")
+      audio = r.listen(source)
+			# recognize speech using Microsoft Bing Voice Recognition
+			BING_KEY = "42cfbf81a1894b8fab2c197e9b509bb4"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
+			try:
+        text = r.recognize_bing(audio, key=BING_KEY)
+			except sr.UnknownValueError:
+				print("We can't hear you, can you speak louder?")
+				continue
+			except sr.RequestError as e:
+				print("Could not request results from Microsoft Bing Voice Recognition service; {0}".format(e))
+			  return
+			print("You: ", text)
+			response = handle(text)
+			print(response)
+			speech.say(response)
 
