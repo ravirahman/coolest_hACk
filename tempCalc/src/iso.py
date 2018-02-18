@@ -3,11 +3,11 @@ import parsedatetime
 import datetime
 
 
+# Load scores
 cal = parsedatetime.Calendar()
-
 scores = []
 times = []
-with open('price.csv', 'r') as f:
+with open('data/projected.csv', 'r') as f:
   reader = csv.reader(f)
   for row in reader:
     dt = cal.parse(row[0])[0]
@@ -15,6 +15,8 @@ with open('price.csv', 'r') as f:
     times.append(int(dt.strftime("%s")))
     scores.append(row[1])
 
+
+# Load cost projections
 def get_cost_proj(TOTAL_COUNT, unix_time):
   for i, tm in enumerate(times):
     if tm > unix_time:

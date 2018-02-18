@@ -1,10 +1,9 @@
 import csv
 import numpy as np
 import parsedatetime
-import datetime
 from sklearn import svm
 from sklearn.utils import shuffle
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
 
 
 cal = parsedatetime.Calendar()
@@ -24,16 +23,19 @@ with open('full.csv', 'r') as f:
     i += 1
 
 
-def slidingWindow(sequence,winSize,step=1):
+def slidingWindow(sequence, winSize, step=1):
     """Returns a generator that will iterate through
     the defined chunks of input sequence.  Input sequence
     must be iterable."""
- 
+
+    global times
+
     # Pre-compute number of chunks to emit
-    numOfChunks = int((len(sequence)-winSize)/step)+1
+    numOfChunks = int((len(sequence) - winSize) / step) + 1
     # Do the work
     for i in range(0, numOfChunks * step, step):
-        yield sequence[i:i+winSize], times[i+winSize-1]
+        yield sequence[i:i + winSize], times[i + winSize - 1]
+
 
 windows = slidingWindow(scores, 20, 2)
 X = []
@@ -53,7 +55,7 @@ del(times)
 
 print("Ready")
 clf = svm.SVR()
-clf.fit(X[:-100], Y[:-100]) 
+clf.fit(X[:-100], Y[:-100])
 
 pred = clf.predict(X[-100:])
 print(pred)

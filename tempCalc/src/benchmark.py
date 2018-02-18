@@ -50,7 +50,7 @@ if __name__ == "__main__":
   print(costs)
 
   ac_temps = [float(x) for x in main(alpha, beta, env_temps, room_temp,
-              min_temp, max_temp, costs)[0]['x']]
+              min_temp, max_temp, costs)['x']]
   print(ac_temps)
 
 
