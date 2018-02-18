@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const axios = require('axios')
 const getPixels = require("get-pixels")
 const schedule = require('node-schedule');
+var FormData = require('form-data');
 
 var app = express()
 const PORT = process.env.PORT || 5000;
@@ -11,7 +12,10 @@ const cors = require('cors');
 
 app.use(bodyParser.json())
 
+var fanGlobal = 0
+
 const PARTICLE = "https://api.particle.io/v1/devices/34005b000e51353532343635/"
+const LED = "https://api.particle.io/v1/devices/1f0025001247343438323536/"
 
 app.use(cors({
   credentials: true,
@@ -29,9 +33,53 @@ function sig(x, mean){
 
 }
 
-app.get('http://gateway.marvel.com/', (req,res) => {
-    axios.get(())
+app.post('/setAC', (req,res) => {
+    const config = { headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'authorization': 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e'
+        }
+    }
+    var speed = req.body.speed
+    var bodyFormData = new FormData();
+    bodyFormData.append('arg', speed);
+    axios({
+        url: (LED + 'motor'),
+        method: 'post',
+        config,
+        data: bodyFormData
+    })
+        .then((res0) => {
+            console.log(res0.data);
+        })
+
+    axios({
+        url: (LED + 'temperature'),
+        method: 'get',
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'authorization': 'Bearer 2648e0d867f1f3ea045707dde1e98aede2d3d32e'
+        }
+        })
+        .then((res0) => {
+            var temp = res0.data.result
+            console.log(temp);
+            var fd = new FormData();
+            fd.append('arg', "12345");
+            axios({
+                url: (LED + 'leds_on'),
+                method: 'post',
+                config,
+                data: fd
+                })
+                .then((res1) => {
+                    console.log(res1.status);
+                    res.status(200).send("SUCCESS")
+                })
+        })
+
 })
+
+
 
 app.get('/thermo', (req,res) => {
     axios({
@@ -67,6 +115,7 @@ app.get('/thermo', (req,res) => {
                 var fan = 0
                 if (res2.data.result > 1.1*res0.data.result){
                     fan = 1
+                    fanGlobal = 1
                     console.log("FAN ON");
                 }
 
