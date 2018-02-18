@@ -37,6 +37,9 @@ def get_temp():
   
   temps = [float(x) for x in main(alpha, beta, env_temps, room_temp, min_temp, max_temp, costs)[0]['x']]
 
+  print(calc_naive(alpha, beta, env_temps[0], room_temp, min_temp, max_temp))
+  print(temps)
+
   total_cost += costs[0] * abs(temps[0] - env_temps[0])
   total_pot_cost += costs[0] * abs(calc_naive(alpha, beta, env_temps[0], room_temp, min_temp, max_temp) - env_temps[0])
   total_en += abs(temps[0] - env_temps[0])

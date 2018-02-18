@@ -18,5 +18,5 @@ with open('price.csv', 'r') as f:
 def get_cost_proj(unix_time):
   for i, tm in enumerate(times):
     if tm > unix_time:
-      return [float(x) for x  in scores[i:i+4]]
+      return [float(scores[i]), float(scores[i + 3]), float(scores[i + 6]), float(scores[i + 9])]
 
