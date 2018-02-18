@@ -19,7 +19,7 @@ To access backendCentral:
 `./access.sh`
 
 ## MIT License 
-Copyright (c) 2017 Eric Zhao, Matt Shaffer, Ravi Rahman, Suyash Saxena
+Copyright (c) 2017 Eric Zhao, Ravi Rahman, Suyash Saxena
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

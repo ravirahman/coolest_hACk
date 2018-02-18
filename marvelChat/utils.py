@@ -197,5 +197,5 @@ def text():
 if __name__ == "__main__":
   print("Say something!")
   while True:
-    voice()
+    text()
 
