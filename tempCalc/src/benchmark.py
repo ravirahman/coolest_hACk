@@ -28,10 +28,12 @@ def calculate_eff(alpha, beta, room_temp, min_temp, max_temp,
   print(total_en)
   print(total_cost)
 
-  eng_saved = 100 * abs(total_pot_en - total_en) / total_en
-  cost_saved = 100 * abs(total_pot_cost - total_cost) / total_cost
-  print("Saved energy %:", eng_saved)
-  print("Saved cost %:", cost_saved)
+  eng_saved = 100 * (total_pot_en - total_en) / total_en
+  cost_saved = 100 * (total_pot_cost - total_cost) / total_cost
+  if int(eng_saved) == -100:
+    eng_saved = 0
+  if int(cost_saved) == -100:
+    cost_saved = 0
 
   return eng_saved, cost_saved
 

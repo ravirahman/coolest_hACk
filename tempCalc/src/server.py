@@ -26,6 +26,9 @@ def get_temp():
   max_temp = float(request.data.get('max'))
   env_temps = get_temps(TOTAL_COUNT)
 
+  if max_temp <= min_temp:
+    raise ValueError
+
   dt = datetime.datetime.now()
   costs = get_cost_proj(TOTAL_COUNT, int(dt.strftime("%s")))
   print("Current cost projections:", costs)
@@ -43,6 +46,13 @@ def get_temp():
 
   expected_next_t = calc_temp(alpha, beta, ac_temps[0], env_temps[0],
                               room_temp, 15)
+  print("a", expected_next_t)
+  print("b", min_temp)
+  print("c", max_temp)
+  if expected_next_t < min_temp:
+    expected_next_t = min_temp
+  if expected_next_t > max_temp:
+    expected_next_t = max_temp
   print("Expected next t:", expected_next_t)
 
   return jsonify({'response': ac_temps[0], 'en_perc': eng, 'cost_perc': cost,
