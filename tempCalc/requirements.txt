@@ -7,4 +7,5 @@ flask
 flask-restful
 flask-api
 flask-cors
+parsedatetime
 

@@ -27,6 +27,3 @@ def get_temps():
     s = (r - l) / 60
     return [l, l + s * 15, l + s * 30, l + s * 45]
 
-
-print(get_temps())
-

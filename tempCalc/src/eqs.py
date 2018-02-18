@@ -1,5 +1,5 @@
-import math
 import numpy as np
+import math
 from scipy.optimize import minimize, basinhopping
 
 
@@ -10,14 +10,29 @@ def calc_temp(alpha, beta, input_temp, reservoir_temp, last_temp, t):
   return term1 + term2 + C * math.exp(-alpha * t + -beta * t)
 
 
+def calc_naive(alpha, beta, env_temp, current_temp, min_temp, max_temp):
+  if env_temp < min_temp:
+    for i in range(50):
+      if calc_temp(alpha, beta, min_temp + i, env_temp, current_temp, 15) > min_temp:
+        return min_temp + i
+    return min_temp + 50
+  elif env_temp > max_temp:
+    for i in range(50):
+      if calc_temp(alpha, beta, max_temp - i, env_temp, current_temp, 15) < max_temp:
+        return max_temp - i 
+    return max_temp - 50
+  else:
+    return env_temp
+
+
 def calc_cost(costs, env_temps, ac_temps):
   total = 0
   for i, cost in enumerate(costs):
-    total += math.pow((env_temps[i] - ac_temps[i]), 2)  * cost
+    total += abs((env_temps[i] - ac_temps[i]))  * cost
   return total
 
 
-def main(alpha=0.05, beta=0.3, env_temps=[90, 70, 90, 100], 
+def main(alpha=0.009, beta=0.1, env_temps=[90, 70, 90, 100], 
     init_temp=90, min_temp=50, max_temp=70, costs=[5, 5, 5, 5],
     debug=False):
 
@@ -38,11 +53,4 @@ def main(alpha=0.05, beta=0.3, env_temps=[90, 70, 90, 100],
   cons = [{'type': 'ineq', 'fun': f} for f in cons]
   
   return minimize(to_optimize, x0, method='COBYLA', constraints=cons), cons
-
-print(main()[0])
-scores = [int(x) for x in main()[0]['x']]
-print(scores)
-
-
-
 
