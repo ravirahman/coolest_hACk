@@ -1,15 +1,37 @@
 import csv
+import random
 
 
 super_heroes = []
-with open('temp.csv', 'r') as f:
+with open('marvel_chars.csv', 'r') as f:
   reader = csv.reader(f)
   for row in reader:
-    super_heroes.append((row[0], int(row[1]), row[2]))
+    if row[2].strip() == "":
+      continue
+    if "(" in row[0]:
+      super_heroes.append((row[0][:row[0].index("(")].strip().lower(), int(row[1]), row[2].strip()))
+      super_heroes.append((row[0][row[0].index("(") + 1:-1].strip().lower(), int(row[1]), row[2].strip()))
+    else:
+      super_heroes.append((row[0].strip().lower(), int(row[1]), row[2].strip()))
 
+
+def get_good_heroes(score):
+  valid = []
+  for hero, power, story in super_heroes:
+    if power > score:
+      valid.append(hero)
+  return random.choice(valid)
+
+def get_bad_heroes(score):
+  valid = []
+  for hero, power, story in super_heroes:
+    if power < score:
+      valid.append(hero)
+  return random.choice(valid)
 
 def match_superheros(text):
   for hero, power, story in super_heroes:
+    # print(hero)
     if hero in text:
       return True, (hero, power, story)
   return False, None
@@ -17,6 +39,13 @@ def match_superheros(text):
 
 def match_power(text):
   for match in ["powerful", "power", "strong"]:
+    if match in text:
+      return True, None
+  return False, None
+
+
+def match_rank(text):
+  for match in ["is anyone", "anybody", "am i"]:
     if match in text:
       return True, None
   return False, None
@@ -57,13 +86,19 @@ def respond(text, my_power, my_name):
     elif my_power < power:
       return hero + " is still more powerful than you." \
           " " + hero + "'s " + str(power) + " power points tower over your " \
-          "mere " + str(my_power) + " existence."
+          "mere " + str(my_power) + "."
     return "Wow, you two are perfectly matched."
   match, _ = match_power(text)
   if match:
-    return "Your power score is " + str(my_power) + ". Gain more power by" \
-        " saving more power! Want to extend your comfortable temperature " \
-        "range?"
+    match2, _ = match_rank(text)
+    if match2:
+      return "At " + str(my_power) + " points, you're more powerful " \
+          "than " + get_bad_heroes(my_power) + " and less powerful than" \
+          " " + get_good_heroes(my_power) + "."
+    else:
+      return "Your power score is " + str(my_power) + ". Gain more power by" \
+          " saving more power! Want to extend your comfortable temperature " \
+          "range?"
   match, _ = match_greeting(text)
   if match:
     return "Hi " + my_name + "."
