@@ -16,7 +16,7 @@ with open('full.csv', 'r') as f:
   reader = csv.reader(f)
   i = 0
   for row in reader:
-    if i is 10000:
+    if i is 4000:
       break
     dt = cal.parse(row[0])[0]
     times.append([dt[3], dt[1]])
@@ -35,18 +35,21 @@ def slidingWindow(sequence,winSize,step=1):
     for i in range(0, numOfChunks * step, step):
         yield sequence[i:i+winSize], times[i+winSize-1]
 
-windows = slidingWindow(scores, 20, 1)
+windows = slidingWindow(scores, 20, 2)
 X = []
 Y = []
 for window, dt in windows:
   X.append(window[:-1] + dt)
   Y.append(window[-1])
-X = np.array(X)
-Y = np.array(Y)
+X = np.array(X, dtype=np.float16)
+Y = np.array(Y, dtype=np.float16)
 X, Y = shuffle(X, Y)
 
 print(X)
 print(Y)
+del(windows)
+del(scores)
+del(times)
 
 print("Ready")
 clf = svm.SVR()

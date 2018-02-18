@@ -3,7 +3,7 @@ from flask_api import FlaskAPI
 import datetime
 from iso import get_cost_proj
 from flask_cors import CORS
-from eqs import main, calc_naive
+from eqs import main, calc_naive, calc_temp
 from climate import get_temps
 
 app = FlaskAPI(__name__)
@@ -48,7 +48,9 @@ def get_temp():
   eng_saved = 100 * (total_pot_en / total_en) / total_en
   cost_saved = 100 * (total_pot_cost / total_cost) / total_cost
 
-  return jsonify({'response': temps, 'en_perc': eng_saved, 'cost_perc': cost_saved})
+  expected_next_t = calc_temp(alpha, beta, temps[0], env_temps[0], room_temp, 15)
+
+  return jsonify({'response': temps[0], 'en_perc': eng_saved, 'cost_perc': cost_saved, 'expected': expected_next_t})
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0')
