@@ -53,8 +53,7 @@ def main(alpha=0.009, beta=0.1, env_temps=[90, 70, 90, 100],
   '''
 
   # Define optimize functions
-  def to_optimize(ac_temps):
-    calc_cost(costs, env_temps, ac_temps)
+  to_optimize = lambda ac_temps: calc_cost(costs, env_temps, ac_temps)
 
   # Define room temp calculator
   def room_temp(n, ac_temps):
