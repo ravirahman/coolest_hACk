@@ -4,25 +4,15 @@ networks:
   default:
 
 services:
-  isoforecast:
+  tempcalc:
     build:
       context: .
-      dockerfile: ./isoForecast/Dockerfile
+      dockerfile: ./tempCalc/Dockerfile
     volumes:
-      - ./isoForecast:/isoForecast
-    networks:
-      - default
-    tty: true
-
-  backendcentral:
-    build:
-      context: .
-      dockerfile: ./backendCentral/Dockerfile
-    volumes:
-      - ./backendCentral:/backendCentral
+      - ./tempCalc:/tempCalc
     networks:
       - default
     tty: true
     ports:
-      - 3000:3000
+      - 5000:5000
 
