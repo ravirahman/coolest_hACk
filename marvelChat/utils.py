@@ -176,7 +176,7 @@ def voice():
   with sr.Microphone() as source:
     audio = r.listen(source)
     # recognize speech using Microsoft Bing Voice Recognition
-    BING_KEY = "42cfbf81a1894b8fab2c197e9b509bb4"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
+    BING_KEY = "censored"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
     try:
       text = r.recognize_bing(audio, key=BING_KEY)
       print("You: ", text)
