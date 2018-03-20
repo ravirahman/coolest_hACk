@@ -34,7 +34,7 @@ function sig(x, mean){
 
 app.post('/setAC', (req, res) => {
   //turn on motor
-  
+  console.log(req.body);
   async.parallel([
     (cb) => {
       var speed = req.body.speed;
@@ -190,7 +190,7 @@ app.get('/thermo', (req, res) => {
     var mid = data[1];
     var bottom = data[2];
     var fan = data[3]
-    if (mid > 1.1 * bottom) {
+    if (bottom > 27.5 || mid > 27.5 || top > 27.5) {
       fan = 1
       console.log("FAN ON");
     }
